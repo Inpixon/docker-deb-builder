@@ -1,0 +1,14 @@
+stages:
+  - build-and-push-image
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.inpixon.cloud:4567
+
+build-and-push-image:
+  stage: build-and-push-image
+  services:
+    - docker:dind
+  image: docker:latest
+  script:
+    - docker build -t registry.inpixon.cloud:4567/docker-artifacts/docker-deb-builder:$CI_COMMIT_REF_NAME .
+    - docker push registry.inpixon.cloud:4567/docker-artifacts/docker-deb-builder:$CI_COMMIT_REF_NAME
